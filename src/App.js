@@ -1,13 +1,21 @@
 import React, { useEffect, useState } from "react";
 import './styles/App.css';
 import twitterLogo from './assets/twitter-logo.svg';
+import { ethers } from "ethers";
 
 // Constants
 const TWITTER_HANDLE = 'testX';
 const TWITTER_LINK = `https://twitter.com/${TWITTER_HANDLE}`;
 
+const tld = '.testX';
+const CONTRACT_ADDRESS = '0x7A893b44439dCe6e0FF268feA0d833459056e105';
+
 const App = () => {
 	const [currentAccount, setCurrentAccount] = useState('');
+	
+	const [domain, setDomain] = useState ('');
+	const [loading, setLoading] = useState(false);
+	const [record, setRecord] = useState('');
 
 	const connectWallet = async () => {
 		try {
@@ -58,6 +66,41 @@ const App = () => {
     </div>
   );
 
+  const renderInputForm = () =>{
+
+	return (
+		<div className="form-container">
+			<div className="first-row">
+				<input
+					type="text"
+					value={domain}
+					placeholder='domain'
+					onChange={e => setDomain(e.target.value)}
+				/>
+
+<p className='tld'> {tld} </p>
+				</div>
+
+				<input
+					type="text"
+					value={record}
+					placeholder='whats ur ninja power'
+					onChange={e => setRecord(e.target.value)}
+				/>
+
+<div className="button-container">
+					<button className='cta-button mint-button' disabled={null} onClick={null}>
+						Mint
+					</button>  
+					<button className='cta-button mint-button' disabled={null} onClick={null}>
+						Set data
+					</button>  
+				</div>
+
+			</div>
+		);
+	}
+
   useEffect(() => {
     checkIfWalletIsConnected();
   }, []);
@@ -74,8 +117,9 @@ const App = () => {
           </header>
         </div>
 
-		{/* Hide the connect button if currentAccount isn't empty*/}
-        {!currentAccount && renderNotConnectedContainer()}
+		{!currentAccount && renderNotConnectedContainer()}
+		{/* Render the input form if an account is connected */}
+		{currentAccount && renderInputForm()}	
 
         <div className="footer-container">
           <img alt="Twitter Logo" className="twitter-logo" src={twitterLogo} />
